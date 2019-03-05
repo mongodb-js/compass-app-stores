@@ -37,13 +37,16 @@ store.refreshInstance = () => {
       },
       dataService: store.getState().dataService
     });
+    // store.getState().dataService.instance({}, (err, i) => {
+    //   store.dispatch(changeInstance(i));
+    // });
   }
 };
 
 store.onActivated = (appRegistry) => {
   // Events emitted from the app registry:
   appRegistry.on('data-service-disconnected', () => {
-    global.hadronApp.state.instance = new MongoDBInstance();
+    global.hadronApp.instance = new MongoDBInstance();
     store.dispatch(reset());
   });
 
@@ -58,6 +61,7 @@ store.onActivated = (appRegistry) => {
     }
 
     store.dispatch(changeInstance(global.hadronApp.instance));
+    store.refreshInstance();
   });
 
   appRegistry.on('refresh-data', () => {
@@ -70,6 +74,8 @@ store.onActivated = (appRegistry) => {
 
   store.subscribe(() => {
     const state = store.getState();
+    console.log('EMITTING STATE:');
+    console.log(state);
     appRegistry.emit('instance-refreshed', state);
   });
 };
