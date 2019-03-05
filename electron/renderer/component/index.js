@@ -1,2 +1,2 @@
-import TestPluginComponent from './component';
+import TestPluginComponent from './instance-component';
 export default TestPluginComponent;

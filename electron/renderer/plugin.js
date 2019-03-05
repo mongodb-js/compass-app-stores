@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
-import TestPlugin from './component';
-import { InstanceStore } from 'stores';
+import InstancePlugin from './component/instance-component';
+import NamespacePlugin from './component/namespace-component';
+import CollectionPlugin from './component/collection-component';
+import { InstanceStore, NamespaceStore, CollectionStore } from 'stores';
 
 class Plugin extends Component {
   static displayName = 'TestPlugin';
@@ -13,9 +15,17 @@ class Plugin extends Component {
    */
   render() {
     return (
-      <Provider store={InstanceStore}>
-        <TestPlugin />
-      </Provider>
+      <div>
+        <Provider store={InstanceStore}>
+          <InstancePlugin />
+        </Provider>
+        <Provider store={NamespaceStore}>
+          <NamespacePlugin />
+        </Provider>
+        <Provider store={CollectionStore}>
+          <CollectionPlugin />
+        </Provider>
+      </div>
     );
   }
 }

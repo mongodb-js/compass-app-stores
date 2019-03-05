@@ -4,7 +4,7 @@ import app from 'hadron-app';
 import MongoDBInstance from 'mongodb-instance-model';
 import AppRegistry from 'hadron-app-registry';
 import { AppContainer } from 'react-hot-loader';
-import { activate } from 'plugin';
+import { activate } from '../../src/index';
 
 import ComponentPlugin from './plugin';
 
@@ -64,6 +64,12 @@ dataService.connect((error, ds) => {
     console.log(`ERROR OCCURRED ${error}`);
   }
   appRegistry.emit('data-service-connected', error, ds);
+  appRegistry.getStore('App.NamespaceStore').ns = 'db.coll';
+  appRegistry.getStore('App.CollectionStore').setCollection({
+    _id: 'collId',
+    readonly: false,
+    capped: false
+  });
 });
 
 if (module.hot) {

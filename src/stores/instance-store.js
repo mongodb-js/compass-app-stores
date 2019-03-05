@@ -17,6 +17,12 @@ store.handleError = (model, resp, options) => {
 
   const StatusAction = global.hadronApp.appRegistry.getAction('Status.Actions');
   StatusAction.hide();
+  const state = {
+    errorMessage: err,
+    dataService: store.getState().dataService,
+    instance: store.getState().instance
+  };
+  global.hadronApp.appRegistry.emit('instance-refreshed', state);
 };
 
 store.refreshInstance = () => {
@@ -31,15 +37,19 @@ store.refreshInstance = () => {
     }
     store.getState().instance.fetch({
       error: store.handleError,
-      success: (instance) => {
+      success: function(instance) {
         store.dispatch(changeInstance(instance));
-        StatusAction.hide();
+        if (StatusAction) StatusAction.hide();
+        /* Emit here because ampersand changes don't trigger rerenders on their own */
+        const state = {
+          dataService: store.getState().dataService,
+          errorMessage: store.getState().errorMessage,
+          instance: instance
+        };
+        global.hadronApp.appRegistry.emit('instance-refreshed', state);
       },
       dataService: store.getState().dataService
     });
-    // store.getState().dataService.instance({}, (err, i) => {
-    //   store.dispatch(changeInstance(i));
-    // });
   }
 };
 
@@ -70,13 +80,6 @@ store.onActivated = (appRegistry) => {
 
   appRegistry.on('agg-pipeline-out-executed', () => {
     store.refreshInstance();
-  });
-
-  store.subscribe(() => {
-    const state = store.getState();
-    console.log('EMITTING STATE:');
-    console.log(state);
-    appRegistry.emit('instance-refreshed', state);
   });
 };
 
