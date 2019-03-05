@@ -2,8 +2,12 @@ import { combineReducers } from 'redux';
 import errorMessage, {
   INITIAL_STATE as ERROR_MESSAGE_INITIAL_STATE
 } from 'modules/instance/error-message';
-import instance from 'modules/instance/instance';
-import dataService from 'modules/instance/data-service';
+import instance, {
+  INITIAL_STATE as INSTANCE_INITIAL_STATE
+} from 'modules/instance/instance';
+import dataService, {
+  INITIAL_STATE as DATA_SERVICE_INITIAL_STATE
+} from 'modules/instance/data-service';
 
 import { RESET } from 'modules/instance/reset';
 /**
@@ -28,7 +32,8 @@ const rootReducer = (state, action) => {
     return {
       ...state,
       errorMessage: ERROR_MESSAGE_INITIAL_STATE,
-      instance: global.hadronApp.instance // TODO: reset??
+      instance: INSTANCE_INITIAL_STATE,
+      dataService: DATA_SERVICE_INITIAL_STATE
     };
   }
   return reducer(state, action);

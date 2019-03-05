@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import MongoDBInstance from 'mongodb-instance-model';
 
 import { reset } from 'modules/instance/reset';
 import { changeErrorMessage } from 'modules/instance/error-message';
-import { changeInstance } from 'modules/instance/instance';
+import { changeInstance, INITIAL_STATE } from 'modules/instance/instance';
 
 class TestPlugin extends Component {
   static displayName = 'InstanceComponent';
@@ -20,7 +19,6 @@ class TestPlugin extends Component {
   };
 
   onReset() {
-    global.hadronApp.instance = new MongoDBInstance();
     this.props.reset();
   }
 
@@ -28,14 +26,8 @@ class TestPlugin extends Component {
     this.props.changeErrorMessage('New error');
   }
 
-
-  refreshData() {
-    global.hadronApp.appRegistry.emit('refresh-data');
-    this.props.changeInstance(JSON.stringify(this.props.instance.toJSON()));
-  }
-
   renderModels() {
-    if (!this.props.instance.toJSON) {
+    if (this.props.instance === INITIAL_STATE) {
       return 'initial state';
     }
     return JSON.stringify(this.props.instance.toJSON());
@@ -53,9 +45,8 @@ class TestPlugin extends Component {
         <p></p>
         <p>The errorMessage is: <code>{this.props.errorMessage}</code></p>
         <p key={this.key}>The instance.collections is: <code>{this.renderModels()}</code></p>
-        <button onClick={this.onReset.bind(this)}>Reset</button>
-        <button onClick={this.refreshData.bind(this)}>Refresh Instance</button>
-        <button onClick={this.setErr.bind(this)}>Set Error</button>
+        <button onClick={this.onReset.bind(this)}>Reset (can only be called once)</button>
+        <button onClick={this.setErr.bind(this)}>Load Instance</button>
       </div>
     );
   }
