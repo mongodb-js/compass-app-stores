@@ -11,8 +11,7 @@ export const INITIAL_STATE = {
   collections: null,
   build: {},
   hostname: 'Retrieving host information',
-  port: '',
-  toJSON: () => ('initial state')
+  port: ''
 };
 
 /**
