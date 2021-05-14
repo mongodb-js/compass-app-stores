@@ -1,3 +1,4 @@
+This project has been moved to https://github.com/mongodb-js/compass/tree/master/packages/compass-app-stores
 # app-stores [![][travis_img]][travis_url]
 
 > The external stores repo for compass
